@@ -12,9 +12,9 @@
 
 #include "application.h"
 
-class ThermistorBetaVDW {
+class VDW_ThermistorBeta {
 public:
-  ThermistorBetaVDW();
+  VDW_ThermistorBeta();
 
   /*
   * Particle init, sets defaults: vcc=3.3, analogReference=3.3, adcMax=4095

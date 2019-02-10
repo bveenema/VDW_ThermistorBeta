@@ -22,17 +22,17 @@
 
 #define ABS_ZERO -273.15
 
-ThermistorBetaVDW::ThermistorBetaVDW(){}
+VDW_ThermistorBeta::VDW_ThermistorBeta(){}
 
-void ThermistorBetaVDW::init(pin_t pin, int seriesResistor, int thermistorNominal, int temperatureNominal, int bCoef, uint32_t samples, uint32_t sampleDelay){
+void VDW_ThermistorBeta::init(pin_t pin, int seriesResistor, int thermistorNominal, int temperatureNominal, int bCoef, uint32_t samples, uint32_t sampleDelay){
   init(pin, 3.3, 3.3, seriesResistor, 4095, thermistorNominal, temperatureNominal, bCoef, samples, sampleDelay);
 }
 
-void ThermistorBetaVDW::init(pin_t pin, int seriesResistor, int adcMax, int thermistorNominal, int temperatureNominal, int bCoef, uint32_t samples, uint32_t sampleDelay){
+void VDW_ThermistorBeta::init(pin_t pin, int seriesResistor, int adcMax, int thermistorNominal, int temperatureNominal, int bCoef, uint32_t samples, uint32_t sampleDelay){
   init(pin, 3.3, 3.3, seriesResistor, adcMax, thermistorNominal, temperatureNominal, bCoef, samples, sampleDelay);
 }
 
-void ThermistorBetaVDW::init(pin_t pin, double vcc, double analogReference, int seriesResistor, int adcMax, int thermistorNominal, int temperatureNominal, int bCoef, uint32_t samples, uint32_t sampleDelay){
+void VDW_ThermistorBeta::init(pin_t pin, double vcc, double analogReference, int seriesResistor, int adcMax, int thermistorNominal, int temperatureNominal, int bCoef, uint32_t samples, uint32_t sampleDelay){
   _pin = pin;
   _vcc = vcc;
   _analogReference = analogReference;
@@ -47,7 +47,7 @@ void ThermistorBetaVDW::init(pin_t pin, double vcc, double analogReference, int 
   pinMode(_pin, INPUT);
 }
 
-void ThermistorBetaVDW::update(){
+void VDW_ThermistorBeta::update(){
   // check if ADC read is due
   if(millis() - _samples.lastRead > _sampleDelay){
     _samples.lastRead = millis();
@@ -60,11 +60,11 @@ void ThermistorBetaVDW::update(){
   }
 }
 
-bool ThermistorBetaVDW::isValid(){
+bool VDW_ThermistorBeta::isValid(){
   return _samples.isValid;
 }
 
-double ThermistorBetaVDW::calcAverage() {
+double VDW_ThermistorBeta::calcAverage() {
   unsigned int sum = 0;
   for(unsigned int i=0; i<_numSamples; i++) {
     sum += _samples.readings[i];
@@ -73,19 +73,19 @@ double ThermistorBetaVDW::calcAverage() {
   return (1. * sum) / _numSamples;
 }
 
-double ThermistorBetaVDW::readTempK(){
+double VDW_ThermistorBeta::readTempK(){
 	return adcToK(calcAverage());
 }
 
-double ThermistorBetaVDW::readTempC(){
+double VDW_ThermistorBeta::readTempC(){
   return kToC(readTempK());
 }
 
-double ThermistorBetaVDW::readTempF(){
+double VDW_ThermistorBeta::readTempF(){
   return cToF(readTempC());
 }
 
-double ThermistorBetaVDW::adcToK(double adc){
+double VDW_ThermistorBeta::adcToK(double adc){
   double Vadc = 3.3 * (adc/4095.0);
 	// double resistance = -1.0 * (_analogReference * _seriesResistor * adc) / (_analogReference * adc - _vcc * _adcMax);
   double resistance = ((_vcc * _seriesResistor) / Vadc) - _seriesResistor; 
@@ -94,11 +94,11 @@ double ThermistorBetaVDW::adcToK(double adc){
   return kelvin;
 }
 
-double ThermistorBetaVDW::kToC(double k){
+double VDW_ThermistorBeta::kToC(double k){
 	double c = k + ABS_ZERO;
 	return c;
 }
 
-double ThermistorBetaVDW::cToF(double c){
+double VDW_ThermistorBeta::cToF(double c){
 	return (c * 1.8) + 32;
 }
