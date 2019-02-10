@@ -18,7 +18,7 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-#include "thermistor-beta-vdw.h"
+#include "VDW_ThermistorBeta.h"
 
 #define ABS_ZERO -273.15
 
